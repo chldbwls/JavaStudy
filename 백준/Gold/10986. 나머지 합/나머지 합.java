@@ -1,41 +1,37 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int size = Integer.parseInt(st.nextToken()); // 배열 크기
-        int num = Integer.parseInt(st.nextToken()); // 나눌 수
-        
-        int[] arr = new int[size];
-        StringTokenizer st2 = new StringTokenizer(br.readLine());
-        for (int i = 0; i < size; i++) {
-            arr[i] = Integer.parseInt(st2.nextToken());
+
+        // 1. N(수의 개수), M(나누기 할 수) 입력받기
+        int N = Integer.parseInt(st.nextToken());   // 수의 개수
+        int M = Integer.parseInt(st.nextToken());   // 나누기 할 수
+        long result = 0;                            // M으로 나누어떨어지는 (i,j) 쌍의 개수
+        long[] S = new long[N + 1];                 // 합배열
+        long[] cnt = new long[M];                   // 같은 나머지의 인덱스를 카운트하는 배열
+
+        // 2. N개의 수 입력받으면서 누적합을 M으로 나눈 나머지를 배열 S에 저장한다.
+        st = new StringTokenizer(br.readLine());
+        for (int i = 1; i < N + 1; i++) {
+            S[i] = (S[i - 1] + Integer.parseInt(st.nextToken())) % M;
+            // 0~i까지의 합을 M으로 나눈 나머지가 0인 경우의 수 카운팅
+            if(S[i] == 0) {
+                result++;
+            }
+            // 나머지가 같은 인덱스의 수 카운팅
+            cnt[(int) S[i]]++;
         }
 
-        // 나머지의 빈도수를 저장할 배열
-        long[] remainderCount = new long[num];
-        remainderCount[0] = 1; // 누적합 % num == 0 인 경우 미리 1로 설정 (초기값)
-
-        int sum = 0; // 누적 합
-        long count = 0; // 나눠떨어지는 구간의 수
-        for (int i = 0; i < size; i++) {
-            sum = (sum + arr[i]) % num; // 누적합의 나머지
-            if (sum < 0) sum += num; // 나머지가 음수가 되지 않도록 처리
-            
-            // 동일한 나머지를 가진 이전 구간이 있으면 그만큼 카운트 증가
-            count += remainderCount[sum];
-
-            // 현재 누적합의 나머지를 나머지 카운트 배열에 추가
-            remainderCount[sum]++;
+        // 3. S[j] % M == S[i-1] % M 을 만족하는 (i,j)의 수를 결과값에 더한다.
+        // 즉, cnt[i](i가 나머지인 인덱스의 수)에서 2가지를 뽑는 경우의 수 카운팅한다.
+        for(int i=0; i<M; i++) {
+            if(cnt[i] > 1) {
+                result += (cnt[i]* (cnt[i]-1) / 2);
+            }
         }
-
-        bw.write(count + "\n");
-        bw.flush();
-        bw.close();
-        br.close();
+        System.out.println(result);
     }
 }
