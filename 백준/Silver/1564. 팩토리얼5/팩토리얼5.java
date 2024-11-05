@@ -8,13 +8,12 @@ public class Main {
 
         int num = Integer.parseInt(br.readLine());
         long total=1;
-        long k = (long)1e12;
         for(int i=1;i<=num;i++){
             total*=i;
             while(total%10==0){
                 total/=10;
             }
-            total=total%k;
+            total=total%(long)1e12;
         }
         total%=100000;
         String result = String.format("%05d", total);
