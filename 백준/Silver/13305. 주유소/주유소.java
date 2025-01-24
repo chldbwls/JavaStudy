@@ -27,7 +27,7 @@ public class Main {
         long min = oil_sta[0];
         for(int i=0;i<N-1;i++){
             total+=dis[i]*min;
-            if(oil_sta[i]>oil_sta[i+1]){
+            if(min>oil_sta[i+1]){
                 min=oil_sta[i+1];
             }
         }
