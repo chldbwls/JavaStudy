@@ -1,28 +1,29 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.PriorityQueue;
- 
+
+import java.io.*;
+import java.util.*;
+
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
- 
-        PriorityQueue<Integer> queue = new PriorityQueue<>( (o1, o2) -> o2 - o1 );
-        String [] temp;
-        for (int i = 0; i < n; i++) {
-            temp = br.readLine().split(" ");
-            for (int j = 0; j < temp.length; j++) {
-                queue.add(Integer.parseInt(temp[j]));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int N = Integer.parseInt(br.readLine());
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for(int i=0;i<N;i++){
+            StringTokenizer st= new StringTokenizer(br.readLine());
+            for(int j=0;j<N;j++){
+                pq.add(Integer.parseInt(st.nextToken()));
             }
         }
-        int answer = 0;
-        int cnt = 0;
-        while (cnt < n ){
-            answer = queue.poll();
-            cnt++;
+
+        for(int i=0;i<N-1;i++){
+            pq.poll();
         }
-        System.out.println(answer);
- 
+        bw.write(pq.poll()+"\n");
+        
+
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
